@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Playlist {
 
+    public Long id;
     public String nombre;
     public String descripcion;
     public List<Cancion> canciones;

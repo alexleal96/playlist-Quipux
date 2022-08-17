@@ -46,7 +46,14 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-    </dependencies>
+		<!-- https://mvnrepository.com/artifact/org.reactivecommons.utils/object-mapper -->
+		<dependency>
+			<groupId>org.reactivecommons.utils</groupId>
+			<artifactId>object-mapper</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+
+	</dependencies>
 
 	<build>
 		<plugins>
