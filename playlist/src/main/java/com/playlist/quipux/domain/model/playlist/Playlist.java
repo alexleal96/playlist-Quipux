@@ -1,4 +1,5 @@
-package com.playlist.quipux.domain.model;
+package com.playlist.quipux.domain.model.playlist;
+
 
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Playlist {
 
-    public Long id;
+    public Integer id;
     public String nombre;
     public String descripcion;
     public List<Cancion> canciones;

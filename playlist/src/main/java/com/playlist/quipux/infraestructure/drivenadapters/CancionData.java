@@ -3,6 +3,8 @@ package com.playlist.quipux.infraestructure.drivenadapters;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -11,19 +13,20 @@ import javax.persistence.*;
 @NoArgsConstructor()
 @Table( name = "cancion")
 @Builder(toBuilder = true)
-public class CancionData {
+public class CancionData implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    public Long id;
-    public String titulo;
-    public String artista;
-    public String album;
-    public String anno;
-    public String genero;
+    private Integer id;
+    private String titulo;
+    private String artista;
+    private String album;
+    private String anno;
+    private String genero;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "playlist_id")
     private PlayListData playlist;
 }

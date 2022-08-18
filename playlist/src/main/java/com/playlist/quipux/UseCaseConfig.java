@@ -1,6 +1,7 @@
 package com.playlist.quipux;
 
-import com.playlist.quipux.domain.model.gateways.PlaylistService;
+import com.playlist.quipux.domain.model.playlist.PlaylistService;
+import com.playlist.quipux.domain.model.requestwebclient.WebClientService;
 import com.playlist.quipux.domain.usecase.PlaylistUseCase;
 import org.reactivecommons.utils.ObjectMapper;
 import org.reactivecommons.utils.ObjectMapperImp;
@@ -16,7 +17,8 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public PlaylistUseCase playlistUseCase(PlaylistService playlistRepository) {
-        return new PlaylistUseCase(playlistRepository);
+    public PlaylistUseCase playlistUseCase(PlaylistService playlistRepository,
+                                           WebClientService webClientService) {
+        return new PlaylistUseCase(playlistRepository, webClientService);
     }
 }

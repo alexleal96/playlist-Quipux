@@ -1,64 +1,81 @@
 package com.playlist.quipux.infraestructure.entrypoints;
 
 
-import com.playlist.quipux.domain.model.Playlist;
-import com.playlist.quipux.infraestructure.entrypoints.response.Response;
+import com.playlist.quipux.domain.model.exceptions.WebClientException;
+import com.playlist.quipux.domain.model.playlist.GenerosSpotify;
+import com.playlist.quipux.domain.model.playlist.FilterSpotify;
+import com.playlist.quipux.domain.model.playlist.Playlist;
+import com.playlist.quipux.domain.usecase.PlaylistUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RequestMapping("/playlist")
 @RequiredArgsConstructor
 @Validated
 @RestController
 public class PlayListRest {
 
+    private final PlaylistUseCase playlistUseCase;
 
-//    @PostMapping(path = "/lists")
-//    public ResponseEntity<Response> playListAdd(@RequestBody Playlist playlist){
-//        if (playlist.nombre == null) {
-//
-//            return new ResponseEntity<>(Response.builder().message("El nombre de la lista no es valido").build(),
-//                    HttpStatus.BAD_REQUEST);
-//        } else {
-//            return new ResponseEntity<>(Response.builder().message("Playlist agregada satisfactoriamente").build(),
-//                    HttpStatus.CREATED);
-//        }
-//    }
+    @PostMapping(path = "/lists")
+    public ResponseEntity<?> playListAdd(@RequestBody Playlist playlist){
+        if (playlist.nombre != null) {
+            playlistUseCase.savePlayList(playlist);
+            return new ResponseEntity<>(playlist, HttpStatus.CREATED);
+
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping(path = "/lists")
     public List<Playlist> getPlaylists() {
-        List<Playlist> list = new ArrayList<>();
-        return list;
+        return playlistUseCase.getPlayList();
     }
 
-//    @GetMapping(path = "/lists/{listName}")
-//    public ResponseEntity<Response> playListDetail(@PathVariable(name = "listName") String listName) {
-//        Playlist playlist = new Playlist();
-//        if (playlist.nombre == null) {
-//
-//            return new ResponseEntity<>(Response.builder().message("La lista no existe").build(),
-//                    HttpStatus.NOT_FOUND);
-//        } else {
-//            return new ResponseEntity<>(Response.builder().message("").build(),
-//                    HttpStatus.OK, Response.builder().playlist(playlist).build());
-//        }
-//    }
+    @GetMapping(path = "/lists/{listName}")
+    public ResponseEntity<?> playListDetail(@PathVariable(name = "listName") String listName) {
+
+            Playlist playlist = playlistUseCase.getPlayListDetail(listName.toLowerCase(Locale.ROOT));
+
+             if (playlist != null){
+                 return new ResponseEntity<>(playlist, HttpStatus.OK);
+             }else{
+                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+             }
+
+    }
 
     @DeleteMapping(path = "/lists/{listName}")
-    public ResponseEntity<Response> deletePlayList(@PathVariable(name = "listName") String listName) {
-        if (1 == 1) {
+    public ResponseEntity<?> deletePlayList(@PathVariable(name = "listName") String listName) {
 
-            return new ResponseEntity<>(Response.builder().message("La lista no existe").build(),
-                    HttpStatus.NOT_FOUND);
+            Playlist playlist = playlistUseCase.getPlayListDetail(listName);
+
+            if (playlist != null){
+
+            playlistUseCase.deletePlayList(playlist.id);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
         } else {
-            return new ResponseEntity<>(Response.builder().message("Lista eliminada satisfactoriamente").build(),
-                    HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping(path = "/lists/genres-musical")
+    public GenerosSpotify getGenresMusical(FilterSpotify filterSpotify,
+                                           @RequestHeader(name = "Authorization") String token)
+            throws WebClientException {
+
+        return playlistUseCase.getGenresMusicalSpotify(filterSpotify, token);
+
+    }
+
 }
