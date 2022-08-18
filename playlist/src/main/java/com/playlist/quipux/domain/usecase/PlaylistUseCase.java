@@ -52,7 +52,8 @@ public class PlaylistUseCase {
          repository.deletePlayList(id);
     }
 
-    public GenerosSpotify getGenresMusicalSpotify(FilterSpotify filterSpotify, String token) throws WebClientException {
+    public GenerosSpotify getGenresMusicalSpotify(FilterSpotify filterSpotify, String token)
+            throws WebClientException {
        return webClientService.getGenresMusicalSpotify(filterSpotify, token);
     }
 }

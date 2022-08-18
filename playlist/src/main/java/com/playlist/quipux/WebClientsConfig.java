@@ -14,7 +14,7 @@ import javax.net.ssl.SSLException;
 public class WebClientsConfig {
 
     @Bean
-    public WebClientService WebClient() throws SSLException {
+    public WebClientService webClient() throws SSLException {
         return new WebClientImpl("https://api.spotify.com/v1/browse/", "");
     }
 
